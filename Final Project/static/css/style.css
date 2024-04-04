@@ -1,0 +1,30 @@
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.bg-light {
+  background-color: black;
+}
+.rk {
+  background: rgb(181, 244, 245);
+  background: linear-gradient(
+    42deg,
+    rgba(181, 244, 245, 1) 0%,
+    rgba(45, 105, 253, 1) 100%
+  );
+}
+.mt-50 {
+  margin-top: 50px;
+  margin-bottom: 23%;
+}
+.nav-link.custom {
+  font-size: 1.5rem; /* Adjust the font size as needed */
+}
+.index-text{
+  text-align: justify;
+  padding-bottom: 1.2em;
+}
+.info-name{
+  font-weight: 600;
+}

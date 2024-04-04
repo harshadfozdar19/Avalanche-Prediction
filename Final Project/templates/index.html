@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      rel="shortcut icon"
+      href="{{ url_for('static', filename='favicon.ico') }}"
+    />
+    <link rel="stylesheet" href="static/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+      crossorigin="anonymous"
+    />
+    <title>Avalanche Predictor</title>
+  </head>
+  <body class="rk">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="{{ url_for('index') }}">
+        <img
+          src="{{ url_for('static', filename='Chandigarh_University_seal.png') }}"
+          width="145"
+          height="50"
+          class="d-inline-block align-top"
+          alt="logo"
+          loading="lazy"
+        />
+      </a>
+        <!-- Additional navigation element -->
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link custom" href="{{ url_for('teamMembers') }}">Team Members</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="row">
+        <div class="card mt-50" style="width: 100%; height: 100%">
+          <div class="card-header">
+            <div class="col-12" style="text-align: center">
+              <h1>Welcome to Avalanche Predictor</h1>
+            </div>
+          </div>
+          <div class="card-body">
+            <form method="post" class="takeInput" novalidate>
+              <div class="form-row">
+                <div class="col-md-6 mb-3">
+                  <label for="elevation">Enter Elevation</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="elevation"
+                    name="elev"
+                    placeholder="Elevation in metres"
+                    required
+                  />
+                  <div class="valid-feedback">Looks good!</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="temperature">Enter Temperature</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="temperature"
+                    name="temp"
+                    placeholder="Temperature in Celcius"
+                    required
+                  />
+                  <div class="valid-feedback">Looks good!</div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="col-md-6 mb-3">
+                  <label for="wind_speed">Enter Wind-Speed</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="wind_speed"
+                    name="wind"
+                    placeholder="Wind-Speed in KM/Hr"
+                    required
+                  />
+                  <div class="valid-feedback">Looks good!</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="humidity">Enter Humidity</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="humi"
+                    id="humidity"
+                    placeholder="Humidity in g.m-3"
+                    required
+                  />
+                  <div class="valid-feedback">Looks good!</div>
+                </div>
+                
+              </div>
+              <div class="">
+                <h5  class="card-title">What is Avalanche Predictor ? </h5>
+                <p class="index-text card-text">An Avalanche Predictor utilizing a DecisionTreeClassifier is a machine learning model 
+                  designed to forecast the likelihood of avalanches based on various environmental factors. 
+                  This model typically takes into account factors such as elevation, wind speed, humidity, 
+                  and temperature to make predictions.</p>
+              </div>
+              <div class="text-center">
+                <button
+                  class="btn btn-primary"
+                  style="align-items: center"
+                  type="submit"
+                  onclick="send_data()"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+            <br />
+            <div class="row">
+              <div class="col-12" style="text-align: center">
+                <h3><span id="prediction"></span></h3>
+              </div>
+            </div>
+
+            <script>
+              // Example starter JavaScript for disabling form submissions if there are invalid fields
+              (function () {
+                "use strict";
+                window.addEventListener(
+                  "load",
+                  function () {
+                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                    var forms = document.getElementsByClassName("takeInput");
+                    // Loop over them and prevent submission
+                    var validation = Array.prototype.filter.call(
+                      forms,
+                      function (form) {
+                        form.addEventListener(
+                          "submit",
+                          function (event) {
+                            if (form.checkValidity() === false) {
+                              event.preventDefault();
+                              event.stopPropagation();
+                            }
+                            form.classList.add("was-validated");
+                          },
+                          false
+                        );
+                      }
+                    );
+                  },
+                  false
+                );
+              })();
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function form_handler(event) {
+        event.preventDefault();
+      }
+      function send_data() {
+        document.querySelector("form").addEventListener("submit", form_handler);
+        var fd = new FormData(document.querySelector("form"));
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/predict", true);
+        document.getElementById("prediction").innerHTML = "Wait! Predicting";
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState == XMLHttpRequest.DONE) {
+            document.getElementById("prediction").innerHTML = xhr.responseText;
+          }
+        };
+
+        xhr.onload = function () {};
+        xhr.send(fd);
+      }
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
